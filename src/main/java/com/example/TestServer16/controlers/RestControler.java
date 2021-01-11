@@ -29,8 +29,6 @@ public class RestControler {
     public Users addUser(){
         System.out.println("addUsers--------------------------");
         Users newUsers = new Users();
-        //usersRepo.save(newUsers);
-
         return  newUsers ;
     }
 
@@ -63,22 +61,49 @@ public class RestControler {
 
     @RequestMapping(value = "/pinNote", method = RequestMethod.GET)
     public List<Note> pinNote(
-            @RequestParam(value = "id") String id,
-            @RequestParam(value = "token") String token
+            @RequestParam(value = "id") String id
     ){
         System.out.println("pinNote--------------------------");
         int noteId = Integer.parseInt(id);
-       // Optional<Note> note = noteRepo.findById(noteId);
-       // Optional<Note> note = Optional.of(noteRepo.findById(noteId)).get();
         Note note = noteRepo.findById(noteId).get();
         note.setPinned(!note.getIsPinned());
         noteRepo.save(note);
-        Iterable <Note>  noteList = noteRepo.findByUserToken(token);
+        Iterable <Note>  noteList = noteRepo.findByUserToken(note.getUserToken());
         NoteListAdmin NoteAdmen = new NoteListAdmin();
         List<Note> res = NoteAdmen.NoteListFilter(noteList);
         return res;
     }
 
+    @RequestMapping(value = "/deleteNote", method = RequestMethod.GET)
+    public List<Note> deleteNote(
+            @RequestParam(value = "id") String id
+    ){
+        System.out.println("deleteNote--------------------------");
+        int noteId = Integer.parseInt(id);
+        Note note = noteRepo.findById(noteId).get();
+        noteRepo.deleteById(noteId);
+        Iterable <Note>  noteList = noteRepo.findByUserToken(note.getUserToken());
+        NoteListAdmin NoteAdmen = new NoteListAdmin();
+        List<Note> res = NoteAdmen.NoteListFilter(noteList);
+        return  res ;
+    }
 
+    @RequestMapping(value = "/editNote", method = RequestMethod.POST)
+    public List<Note> editNote(@RequestBody String data){
+        System.out.println("editNote--------------------------");
+        System.out.println(data);
+        Note newNote = null;
+        try {
+            newNote = new ObjectMapper().readValue(data, Note.class);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        noteRepo.save(newNote);
+        Iterable <Note>  noteList = noteRepo.findByUserToken(newNote.getUserToken());
+        NoteListAdmin NoteAdmen = new NoteListAdmin();
+        List<Note> res = NoteAdmen.NoteListFilter(noteList);
+
+        return res;
+    }
 
 }
