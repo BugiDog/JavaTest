@@ -11,6 +11,7 @@ public class NoteListAdmin {
         List<Note> target = new ArrayList<Note>();
         List<Note> finalNoteList = new ArrayList<Note>();
         noteList.forEach(target::add);
+
         for(Note item:target ){
             if(item.getIsPinned()){
                 finalNoteList.add(item);
@@ -24,4 +25,6 @@ public class NoteListAdmin {
 
         return finalNoteList;
     }
+
+
 }

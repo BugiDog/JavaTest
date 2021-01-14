@@ -22,4 +22,24 @@ public class Tag {
         this.name = name;
         this.isActive = isActive;
     }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public String getUserToken() {
+        return userToken;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Boolean getIsActive() {
+        return isActive;
+    }
+
+    public void setActive(Boolean active) {
+        isActive = active;
+    }
 }

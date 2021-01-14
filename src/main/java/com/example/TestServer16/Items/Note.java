@@ -3,6 +3,9 @@ package com.example.TestServer16.Items;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.awt.*;
+import java.util.List;
+
 
 @Entity
 public class Note {
@@ -14,9 +17,17 @@ public class Note {
     private String title;
     private String description;
     private boolean isPinned;
-//    private Tag [] tagArray;
+    private int [] TagsArray;
 
     public Note() {
+    }
+
+    public Note(String userToken, String title, String description, boolean isPinned,int [] activeTagsArray) {
+        this.userToken = userToken;
+        this.title = title;
+        this.description = description;
+        this.isPinned = isPinned;
+        this.TagsArray = activeTagsArray;
     }
 
     public String getUserToken() {
@@ -39,15 +50,14 @@ public class Note {
         return isPinned;
     }
 
+    public int []  getActiveTagsArray() {
+        return TagsArray;
+    }
+
+
     public void setPinned(boolean pinned) {
         isPinned = pinned;
     }
 
-    public Note(String userToken, String title, String description, boolean isPinned) {
-        this.userToken = userToken;
-        this.title = title;
-        this.description = description;
-        this.isPinned = isPinned;
-//        this.tagArray = tagArray;
-    }
+
 }
