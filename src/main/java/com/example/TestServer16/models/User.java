@@ -1,15 +1,17 @@
-package com.example.TestServer16.Items;
+package com.example.TestServer16.models;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import java.security.SecureRandom;
 import java.util.Base64;
 
 
 
 @Entity
-public class Users {
+@Table(name="users")
+public class User {
 
     @Id
     @GeneratedValue
@@ -21,7 +23,7 @@ public class Users {
         return token;
     }
 
-    public Users() {
+    public User() {
     }
 
     private static final SecureRandom secureRandom = new SecureRandom(); //threadsafe

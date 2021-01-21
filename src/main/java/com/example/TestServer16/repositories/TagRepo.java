@@ -1,7 +1,6 @@
-package com.example.TestServer16.repos;
+package com.example.TestServer16.repositories;
 
-import com.example.TestServer16.Items.Note;
-import com.example.TestServer16.Items.Tag;
+import com.example.TestServer16.models.Tag;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
