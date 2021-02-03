@@ -103,4 +103,9 @@ public class NoteDTO {
     public void setTagsArray(List<Tag> tagsArray) {
         this.tagsArray = tagsArray;
     }
+
+    @Override
+    public String toString() {
+        return title+description;
+    }
 }

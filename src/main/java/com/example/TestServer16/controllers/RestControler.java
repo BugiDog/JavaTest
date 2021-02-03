@@ -1,5 +1,6 @@
 package com.example.TestServer16.controllers;
 
+import com.example.TestServer16.DTO.NoteAndTagDTO;
 import com.example.TestServer16.DTO.NoteDTO;
 import com.example.TestServer16.DTO.TagDTO;
 import com.example.TestServer16.models.Note;
@@ -17,8 +18,9 @@ import org.springframework.web.bind.annotation.*;
 
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-
+import java.util.Set;
 
 
 @RestController
@@ -41,18 +43,34 @@ public class RestControler {
         return  newUsers ;
     }
 
+    @RequestMapping(value = "/searchNote", method = RequestMethod.GET)
+    public List<NoteDTO> searchNote(
+            @RequestParam(value = "token") String token,
+            @RequestParam(value = "searchQuery") String searchQuery){
+        System.out.println("searchNote--------------------------");
+        Iterable <Tag>  tagList = tagRepo.findByUserToken(token);
+        Iterable <Note>  noteList =NoteGener(tagList,token);
+        NoteListAdmin NoteAdmen = new NoteListAdmin();
+        List<NoteDTO> res = NoteAdmen.NoteListFilter(noteList,tagList,searchQuery);
+        return  res ;
+    }
+
     @RequestMapping(value = "/loadNoteList", method = RequestMethod.GET)
     public List<NoteDTO> loadNoteList(@RequestParam(value = "token") String token){
         System.out.println("loadNoteList--------------------------");
-        Iterable <Note>  noteList = noteRepo.findByUserToken(token);
+        //Iterable <Note>  noteList = noteRepo.findByUserToken(token);
         Iterable <Tag>  tagList = tagRepo.findByUserToken(token);
+        Iterable <Note>  noteList =NoteGener(tagList,token);
         NoteListAdmin NoteAdmen = new NoteListAdmin();
-        List<NoteDTO> res = NoteAdmen.NoteListFilter(noteList,tagList);
+        String searchQuery = "";
+        List<NoteDTO> res = NoteAdmen.NoteListFilter(noteList,tagList,searchQuery);
         return res;
     }
 
     @RequestMapping(value = "/addNote", method = RequestMethod.POST)//убрать userToken из отправки на бэк
-    public List<NoteDTO> addNote(@RequestBody String data){
+    public List<NoteDTO> addNote(
+            @RequestBody String data,
+            @RequestParam(value = "searchQuery") String searchQuery){
         System.out.println("addNote--------------------------");
         System.out.println(data);
         Note newNote = null;
@@ -73,47 +91,55 @@ public class RestControler {
             tag.getNotes().add(newNote);
         }
         noteRepo.save(newNote);
-        Iterable <Note>  noteList = noteRepo.findByUserToken(newNote.getUserToken());
         Iterable <Tag>  tagList = tagRepo.findByUserToken(newNote.getUserToken());
+        Iterable <Note>  noteList =NoteGener(tagList,newNote.getUserToken());
+
+
         NoteListAdmin NoteAdmen = new NoteListAdmin();
-        List<NoteDTO> res = NoteAdmen.NoteListFilter(noteList,tagList);
+        List<NoteDTO> res = NoteAdmen.NoteListFilter(noteList,tagList,searchQuery);
 
         return res;
     }
 
     @RequestMapping(value = "/pinNote", method = RequestMethod.GET)
     public List<NoteDTO> pinNote(
-            @RequestParam(value = "id") String id
+            @RequestParam(value = "id") String id,
+            @RequestParam(value = "searchQuery") String searchQuery
     ){
         System.out.println("pinNote--------------------------");
         int noteId = Integer.parseInt(id);
-        Note note = noteRepo.findById(noteId).get();
-        note.setPinned(!note.getIsPinned());
-        noteRepo.save(note);
-        Iterable <Note>  noteList = noteRepo.findByUserToken(note.getUserToken());
-        Iterable <Tag>  tagList = tagRepo.findByUserToken(note.getUserToken());
+        Note newNote = noteRepo.findById(noteId).get();
+        newNote.setPinned(!newNote.getIsPinned());
+        noteRepo.save(newNote);
+        //Iterable <Note>  noteList = noteRepo.findByUserToken(note.getUserToken());
+        Iterable <Tag>  tagList = tagRepo.findByUserToken(newNote.getUserToken());
+        Iterable <Note>  noteList =NoteGener(tagList,newNote.getUserToken());
         NoteListAdmin NoteAdmen = new NoteListAdmin();
-        List<NoteDTO> res = NoteAdmen.NoteListFilter(noteList,tagList);
+        List<NoteDTO> res = NoteAdmen.NoteListFilter(noteList,tagList,searchQuery);
         return res;
     }
 
     @RequestMapping(value = "/deleteNote", method = RequestMethod.GET)
     public List<NoteDTO> deleteNote(
-            @RequestParam(value = "id") String id
+            @RequestParam(value = "id") String id,
+            @RequestParam(value = "searchQuery") String searchQuery
     ){
         System.out.println("deleteNote--------------------------");
         int noteId = Integer.parseInt(id);
-        Note note = noteRepo.findById(noteId).get();
+        Note newNote = noteRepo.findById(noteId).get();
         noteRepo.deleteById(noteId);
-        Iterable <Note>  noteList = noteRepo.findByUserToken(note.getUserToken());
-        Iterable <Tag>  tagList = tagRepo.findByUserToken(note.getUserToken());
+        //Iterable <Note>  noteList = noteRepo.findByUserToken(note.getUserToken());
+        Iterable <Tag>  tagList = tagRepo.findByUserToken(newNote.getUserToken());
+        Iterable <Note>  noteList =NoteGener(tagList,newNote.getUserToken());
         NoteListAdmin NoteAdmen = new NoteListAdmin();
-        List<NoteDTO> res = NoteAdmen.NoteListFilter(noteList,tagList);
+        List<NoteDTO> res = NoteAdmen.NoteListFilter(noteList,tagList,searchQuery);
         return  res ;
     }
 
     @RequestMapping(value = "/editNote", method = RequestMethod.POST)
-    public List<NoteDTO> editNote(@RequestBody String data){
+    public List<NoteDTO> editNote(
+            @RequestBody String data,
+            @RequestParam(value = "searchQuery") String searchQuery){
         System.out.println("editNote--------------------------");
         System.out.println(data);
         Note newNote = null;
@@ -130,16 +156,21 @@ public class RestControler {
             tag.getNotes().add(newNote);
         }
         noteRepo.save(newNote);
-        Iterable <Note>  noteList = noteRepo.findByUserToken(newNote.getUserToken());
+        //Iterable <Note>  noteList = noteRepo.findByUserToken(newNote.getUserToken());
         Iterable <Tag>  tagList = tagRepo.findByUserToken(newNote.getUserToken());
+
+        Iterable <Note>  noteList =NoteGener(tagList,newNote.getUserToken());
+
         NoteListAdmin NoteAdmen = new NoteListAdmin();
-        List<NoteDTO> res = NoteAdmen.NoteListFilter(noteList,tagList);
+        List<NoteDTO> res = NoteAdmen.NoteListFilter(noteList,tagList,searchQuery);
 
         return res;
     }
 
     @RequestMapping(value = "/addTag", method = RequestMethod.POST)
-    public List <TagDTO> addTag(@RequestBody String data){
+    public NoteAndTagDTO addTag(
+            @RequestBody String data,
+            @RequestParam(value = "searchQuery") String searchQuery){
         System.out.println("addTag--------------------------");
         System.out.println(data);
         Tag newTag = null;
@@ -156,16 +187,25 @@ public class RestControler {
             TagDTO tagDTO= new TagDTO(tag);
             rezTagsList.add(tagDTO);
         }
-        return rezTagsList;
+        Iterable <Note>  noteList =NoteGener(tagsList,newTag.getUserToken());
+        NoteListAdmin NoteAdmen = new NoteListAdmin();
+        List<NoteDTO> NoteList = NoteAdmen.NoteListFilter(noteList,tagsList,searchQuery);
+        NoteAndTagDTO rez = new NoteAndTagDTO(NoteList,rezTagsList);
+        return rez;
     }
 
     @RequestMapping(value = "/deleteTag", method = RequestMethod.GET)
-    public List <TagDTO> deleteTag(
-            @RequestParam(value = "id") String id
+    public NoteAndTagDTO deleteTag(
+            @RequestParam(value = "id") String id,
+            @RequestParam(value = "searchQuery") String searchQuery
     ){
         System.out.println("deleteTag--------------------------");
         int tagId = Integer.parseInt(id);
         Tag newTag = tagRepo.findById(tagId).get();
+        for(Note note:newTag.getNotes() ){
+            note.getTags().remove(newTag);
+        }
+
         tagRepo.deleteById(tagId);
         Iterable <Tag>  tagsList = tagRepo.findByUserToken(newTag.getUserToken());
         List <TagDTO> rezTagsList = new ArrayList<>();
@@ -173,7 +213,11 @@ public class RestControler {
             TagDTO tagDTO= new TagDTO(tag);
             rezTagsList.add(tagDTO);
         }
-        return  rezTagsList ;
+        Iterable <Note>  noteList =NoteGener(tagsList,newTag.getUserToken());
+        NoteListAdmin NoteAdmen = new NoteListAdmin();
+        List<NoteDTO> NoteList = NoteAdmen.NoteListFilter(noteList,tagsList,searchQuery);
+        NoteAndTagDTO rez = new NoteAndTagDTO(NoteList,rezTagsList);
+        return  rez ;
     }
 
     @RequestMapping(value = "/loadTagList", method = RequestMethod.GET)
@@ -192,24 +236,33 @@ public class RestControler {
     }
 
         @RequestMapping(value = "/changeTagStatus", method = RequestMethod.GET)
-    public  List <TagDTO> changeTagStatus(
-            @RequestParam(value = "id") String id
+    public  NoteAndTagDTO changeTagStatus(
+            @RequestParam(value = "id") String id,
+            @RequestParam(value = "searchQuery") String searchQuery
     ){
         System.out.println("changeTagStatus--------------------------");
         int tagId = Integer.parseInt(id);
         Tag newTag = tagRepo.findById(tagId).get();
             newTag.setIsActive(!newTag.getIsActive());
         tagRepo.save(newTag);
-        Iterable <Tag>  tagsList = tagRepo.findByUserToken(newTag.getUserToken());
+        Iterable <Tag>  tagList = tagRepo.findByUserToken(newTag.getUserToken());
+
+            Iterable <Note>  noteList =NoteGener(tagList,newTag.getUserToken());
+
+            NoteListAdmin NoteAdmen = new NoteListAdmin();
+            List<NoteDTO> NoteList = NoteAdmen.NoteListFilter(noteList,tagList,searchQuery);
             List <TagDTO> rezTagsList = new ArrayList<>();
-            for(Tag tag: tagsList){
+            for(Tag tag: tagList){
                 TagDTO tagDTO= new TagDTO(tag);
                 rezTagsList.add(tagDTO);
             }
+            NoteAndTagDTO rez = new NoteAndTagDTO(NoteList,rezTagsList);
+
+
 //        Iterable <Note>  noteList = noteRepo.findByUserToken(tag.getUserToken());
 //        NoteListAdmin NoteAdmen = new NoteListAdmin();
 //        List<Note> res = NoteAdmen.NoteListFilter(noteList);
-        return  rezTagsList ;
+        return  rez ;
     }
 
 //    @RequestMapping(value = "/changeTagStatus", method = RequestMethod.GET)
@@ -227,6 +280,31 @@ public class RestControler {
 //        return  tagsList ;
 //    }
 
+    private Iterable<Note> NoteGener( Iterable <Tag> tagList,String token){
+        Set<Note> noteSet = new HashSet<>();
+        Iterable <Note>  primaryNoteList = noteRepo.findByUserToken(token);
+        for (Note note:primaryNoteList){
+            if(note.getIsPinned()){
+                noteSet.add(note);
+            }
+        }
+        boolean flag = false;
+        for(Tag tag : tagList){
+            if(tag.getIsActive()){
+                flag=true;
+                for(Note note : tag.getNotes()){
+                    noteSet.add(note);
+                }
+            }
+        }
+        Iterable <Note>  noteList;
+        if(!flag){
+            noteList = primaryNoteList;
+        } else {
+            noteList=noteSet;
+        }
+        return noteList;
+    }
 
 
 }
