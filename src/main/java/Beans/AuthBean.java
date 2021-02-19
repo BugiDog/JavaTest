@@ -1,14 +1,20 @@
 package Beans;
 
-import EJBControllers.UserEJB;
+import EJBControllers.AuthEJB;
+import Entitys.User;
+import Exceptions.AuthException;
 
 import javax.ejb.EJB;
 
 import javax.enterprise.context.SessionScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 @Named
 @SessionScoped
@@ -16,12 +22,14 @@ public class AuthBean implements Serializable {
 
     private String login;
     private String password;
+    private boolean saveUser = false;
+    private String ExceptionMessage;
 
-    private boolean loginSuccess;
-
+    @Inject
+    TodoBean todoBean;
 
     @EJB
-    private UserEJB userEJB;
+    private AuthEJB authEJB;
 
     public String getLogin() {
         return login;
@@ -39,15 +47,38 @@ public class AuthBean implements Serializable {
         this.password = password;
     }
 
-    public void addUser(){
-       boolean chek = userEJB.addUser(login, password);
-        System.out.println("chek:"+chek);
+    public String getExceptionMessage() {
+        return ExceptionMessage;
+    }
+
+    public boolean isSaveUser() {
+        return saveUser;
+    }
+
+    public void setSaveUser(boolean saveUser) {
+        this.saveUser = saveUser;
+    }
+
+    public void authorization() {
+        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
         try {
-            if (chek){
-                FacesContext.getCurrentInstance().getExternalContext().redirect("pages/todoPage.xhtml");
-            } else {
-                FacesContext.getCurrentInstance().getExternalContext().redirect("authorization.xhtml");
+            User user = authEJB.checkPassword(login, password);
+            todoBean.setUser(user);
+            if (saveUser) {
+                Map<String, Object> cookieProperties = new HashMap<>();
+//              cookieProperties.put("maxAge", 31536000);// dot work
+                externalContext.addResponseCookie("authToken", user.getAuthToken(), cookieProperties);
             }
+            redirectToPage(externalContext, "pages/todoPage.xhtml");
+        } catch (AuthException e) {
+            ExceptionMessage = e.getMassage();
+            redirectToPage(externalContext, "authorization.xhtml");
+        }
+    }
+
+    private void redirectToPage(ExternalContext externalContext, String URL) {
+        try {
+            externalContext.redirect(URL);
         } catch (IOException e) {
             e.printStackTrace();
         }

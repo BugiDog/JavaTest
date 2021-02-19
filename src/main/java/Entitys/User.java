@@ -7,9 +7,13 @@ import java.util.Base64;
 @NamedQueries({
         @NamedQuery(
                 name = "findByLogin",
-                query = "select login  from User where login = :login"
-        )}
-)
+                query = "select l from User l where l.login = :login"
+        ),
+        @NamedQuery(
+                name = "findByAuthToken",
+                query = "select t from User t where t.authToken = :authToken"
+        )
+})
 
 @Entity
 @Table(name = "users")
@@ -28,10 +32,11 @@ public class User {
 
     public User() {
     }
+
     public User(String name, String lastName) {
         this.login = name;
         this.password = lastName;
-        authToken =generateNewToken();
+        authToken = generateNewToken();
     }
 //    public User(Integer id,String name, String lastName) {
 //        this.id=id;
@@ -70,7 +75,12 @@ public class User {
 
     @Override
     public String toString() {
-        return login+password;
+        return "User{" +
+                "id=" + id +
+                ", login='" + login + '\'' +
+                ", password='" + password + '\'' +
+                ", authToken='" + authToken + '\'' +
+                '}';
     }
 
     private static final SecureRandom secureRandom = new SecureRandom(); //threadsafe
