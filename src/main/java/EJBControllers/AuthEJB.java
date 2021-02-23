@@ -12,22 +12,15 @@ public class AuthEJB {
     @PersistenceContext(unitName = "examplePU")
     private EntityManager entityManager;
 
-    public boolean addUser(String login, String password) {
-        System.out.println("addUser in EJB");
-        System.out.println("login:" + login + "\npassword" + password);
+    public User addUser(String login, String password) {
+        User user = new User(login, password);
+        entityManager.persist(user);
+        return user;
 
-        if (checkUser(login)) {
-            System.out.println("Add User");
-            entityManager.persist(new User(login, password));
-            return true;
-        } else {
-            System.out.println("Ass");
-            return false;
-        }
     }
 
     public boolean checkUser(String login) {
-        Query query = entityManager.createNamedQuery("findByLogin")
+        TypedQuery<User> query = entityManager.createNamedQuery("findByLogin", User.class)
                 .setParameter("login", login);
         if (query.getResultList().isEmpty()) {
             return true;

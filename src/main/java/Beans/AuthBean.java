@@ -11,19 +11,19 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.io.IOException;
+import javax.servlet.http.Cookie;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 @Named
 @SessionScoped
-public class AuthBean implements Serializable {
+public class AuthBean extends Forward implements Serializable {
 
     private String login;
     private String password;
     private boolean saveUser = false;
-    private String ExceptionMessage;
+    private String exceptionMessage;
 
     @Inject
     TodoBean todoBean;
@@ -48,7 +48,7 @@ public class AuthBean implements Serializable {
     }
 
     public String getExceptionMessage() {
-        return ExceptionMessage;
+        return exceptionMessage;
     }
 
     public boolean isSaveUser() {
@@ -59,8 +59,34 @@ public class AuthBean implements Serializable {
         this.saveUser = saveUser;
     }
 
-    public void authorization() {
+    public void authCheckCookie() {
+//      FacesContext facescontext = FacesContext.getCurrentInstance();
+//      ExternalContext externalContext = facescontext.getExternalContext();
         ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+        System.out.println("checkAuthToken");
+        Map<String, Object> cookies = externalContext.getRequestCookieMap();
+        if (cookies.containsKey("authToken")) {
+            try {
+                Cookie cookie = (Cookie) cookies.get("authToken");
+                String authToken = cookie.getValue();
+                System.out.println("CheckCookies authToken: " + authToken);
+                if (!authToken.isEmpty()) {
+                    System.out.println("CheckCookies redirectToPage pages/todoPage.xhtml");
+                    User user = authEJB.checkAuthToken(authToken);
+                    todoBean.setUser(user);
+                    redirectToPage(externalContext, "todoPage.xhtml");
+                }
+            } catch (AuthException e) {
+                System.out.println("CheckCookies redirectToPage authorization.xhtml");
+            }
+        }
+    }
+
+    public void authorization() {
+        //       FacesContext facescontext = FacesContext.getCurrentInstance();
+        //       ExternalContext externalContext = facescontext.getExternalContext();
+        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+
         try {
             User user = authEJB.checkPassword(login, password);
             todoBean.setUser(user);
@@ -69,18 +95,24 @@ public class AuthBean implements Serializable {
 //              cookieProperties.put("maxAge", 31536000);// dot work
                 externalContext.addResponseCookie("authToken", user.getAuthToken(), cookieProperties);
             }
-            redirectToPage(externalContext, "pages/todoPage.xhtml");
+            System.out.println("AuthBean redirectToPage pages/todoPage.xhtml");
+
+            redirectToPage(externalContext, "todoPage.xhtml");
         } catch (AuthException e) {
-            ExceptionMessage = e.getMassage();
+            exceptionMessage = e.getMassage();
+            System.out.println("AuthBean redirectToPage authorization.xhtml");
+
             redirectToPage(externalContext, "authorization.xhtml");
         }
     }
 
-    private void redirectToPage(ExternalContext externalContext, String URL) {
-        try {
-            externalContext.redirect(URL);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void goToRegistration() {
+        //       FacesContext context = FacesContext.getCurrentInstance();
+        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+
+        System.out.println("AuthBean redirectToPage pages/registration.xhtml");
+        redirectToPage(externalContext, "registration.xhtml");
     }
+
+
 }

@@ -3,6 +3,8 @@ package Entitys;
 import javax.persistence.*;
 import java.security.SecureRandom;
 import java.util.Base64;
+import java.util.HashSet;
+import java.util.Set;
 
 @NamedQueries({
         @NamedQuery(
@@ -20,7 +22,7 @@ import java.util.Base64;
 public class User {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(unique = true)
@@ -30,6 +32,9 @@ public class User {
 
     private String authToken;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    private Set<Note> Notes = new HashSet<Note>();
+
     public User() {
     }
 
@@ -38,12 +43,6 @@ public class User {
         this.password = lastName;
         authToken = generateNewToken();
     }
-//    public User(Integer id,String name, String lastName) {
-//        this.id=id;
-//        this.login = name;
-//        this.password = lastName;
-//        authToken =generateNewToken();
-//    }
 
     public Integer getId() {
         return id;
@@ -71,6 +70,14 @@ public class User {
 
     public String getAuthToken() {
         return authToken;
+    }
+
+    public Set<Note> getNotes() {
+        return Notes;
+    }
+
+    public void setNotes(Set<Note> notes) {
+        Notes = notes;
     }
 
     @Override
