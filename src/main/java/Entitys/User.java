@@ -76,9 +76,6 @@ public class User {
         return Notes;
     }
 
-    public void setNotes(Set<Note> notes) {
-        Notes = notes;
-    }
 
     @Override
     public String toString() {

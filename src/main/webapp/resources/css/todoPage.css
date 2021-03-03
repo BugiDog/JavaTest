@@ -1,0 +1,22 @@
+
+.login {
+  width: 500px;
+  height: 100px;
+  background-color: red;
+}
+
+.noteItem {
+  margin: 10px;
+  border: 1px solid;
+  background-color: blue;
+}
+
+/*.change{*/
+/*  display: none;*/
+/*}*/
+
+/*.notChange{*/
+/*  display: block;*/
+/*}*/
+
+

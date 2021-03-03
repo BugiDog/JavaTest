@@ -5,33 +5,53 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-     >
+      xmlns:p="http://primefaces.org/ui"
+>
 <f:view>
     <f:event type="preRenderView" listener="#{todoBean.todoCheckCookie()}"/>
+
 </f:view>
 <h:head>
     <title>TODO</title>
+    <h:outputStylesheet library="css" name="todoPage.css"/>
+    <h:outputScript library="js" name="main.js"/>
 </h:head>
 <h:body>
-    <h:outputText value="#{todoBean.user.login}"/>
-    <h:form>
-        <h:outputText value="Title"/><br/>
-        <h:inputText value="#{noteBean.title}"/><br/>
-        <h:outputText value="Description"/><br/>
-        <h:inputText value="#{noteBean.description}"/><br/>
-        <h:selectBooleanCheckbox value="#{noteBean.pinned}"/>
-        <br/>
-        <h:commandButton value="Add Note" action="#{noteBean.addNote()}"/>
-    </h:form>
-    <ui:repeat value="#{todoBean.user.notes}" var="var">
-        <h:outputText value="#{var.title}"/><br/>
-        <h:outputText value="#{var.description}"/><br/>
-    </ui:repeat>
+    <h:panelGroup layout="block">
+        <h:outputLabel value="#{todoBean.user.login}" styleClass="login"/>
+
+        <!--        <h:commandButton value="Добавить заметку"  onclick="add('pflzvsdfg')"/>-->
+        <h:form>
+            <h:commandButton value="Добавить заметку" action="#{noteBean.openModalWindow}"/>
+        </h:form>
+
+        <ui:repeat value="#{todoBean.user.notes}" var="var">
+            <h:panelGroup layout="block" styleClass="noteItem">
+                <ui:include src="resources/components/note.xhtml">
+                    <ui:param name="data" value="#{var}"></ui:param>
+                </ui:include>
+            </h:panelGroup>
 
 
-    <h:form>
-        <h:commandButton value="Выйти" action="#{todoBean.exit()}"/>
-    </h:form>
+            <!--    <div class="menuRight">-->
+            <!--        <ui:insert name="menuRight">-->
+            <!--            <ui:include src="pages/todoPage.xhtml"/>-->
+            <!--        </ui:insert>-->
+            <!--    </div>-->
+        </ui:repeat>
+
+        <h:panelGroup layout="block" styleClass="change" id="modal" rendered="#{noteBean.modalWindowIsOpen}">
+            <ui:include src="resources/components/addAndEditNote.xhtml">
+                <!--            <ui:param name="data" value=""></ui:param>-->
+            </ui:include>
+        </h:panelGroup>
+
+
+        <h:form>
+            <h:commandButton value="Выйти" action="#{todoBean.exit()}"/>
+        </h:form>
+
+    </h:panelGroup>
 
 </h:body>
 </html>

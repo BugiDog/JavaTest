@@ -2,6 +2,7 @@ package Beans;
 
 import EJBControllers.AuthEJB;
 import EJBControllers.TodoEJB;
+import Entitys.Note;
 import Entitys.User;
 
 import javax.ejb.EJB;
@@ -21,11 +22,18 @@ public class NoteBean implements Serializable {
     TodoBean todoBean;
 
 
+    private Integer id;
+
     private String title;
 
     private String description;
 
     private boolean isPinned;
+
+    private boolean modalWindowIsOpen;
+
+    public NoteBean() {
+    }
 
     public String getTitle() {
         return title;
@@ -51,9 +59,51 @@ public class NoteBean implements Serializable {
         isPinned = pinned;
     }
 
-    public void addNote(){
-       User user = todoEJB.addNote(todoBean.getUser().getId(),title,description,isPinned);
-       todoBean.setUser(user);
+    public boolean isModalWindowIsOpen() {
+        return modalWindowIsOpen;
+    }
+
+    public void setModalWindowIsOpen(boolean modalWindowIsOpen) {
+        this.modalWindowIsOpen = modalWindowIsOpen;
+    }
+
+    public void openModalWindow() {
+        System.out.println("openModalWindow");
+        modalWindowIsOpen = true;
+    }
+
+    public void openModalWindow(Note note) {
+        id = note.getId();
+        title = note.getTitle();
+        description = note.getDescription();
+        isPinned = note.isPinned();
+        modalWindowIsOpen = true;
+    }
+
+    public void closeModalWindow() {
+        modalWindowIsOpen = false;
+    }
+
+    public void deleteNote(Note note) {
+        System.out.println(note.toString());
+        User user = todoEJB.deleteNote(todoBean.getUser().getId(), note.getId());
+        todoBean.setUser(user);
+    }
+
+
+    public void save() {
+        User user;
+        if (id == null) {
+            user = todoEJB.addNote(todoBean.getUser().getId(), title, description, isPinned);
+        } else {
+            user = todoEJB.editNote(todoBean.getUser().getId(), id, title, description, isPinned);
+        }
+        id = null;
+        title = "";
+        description = "";
+        isPinned = false;
+        closeModalWindow();
+        todoBean.setUser(user);
     }
 
 

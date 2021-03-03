@@ -20,6 +20,8 @@ public class TodoBean extends Forward implements Serializable {
 
     private User user;
 
+
+
     @EJB
     private AuthEJB authEJB;
 
@@ -30,6 +32,8 @@ public class TodoBean extends Forward implements Serializable {
     public void setUser(User user) {
         this.user = user;
     }
+
+
 
     public void todoCheckCookie() {
 //      FacesContext facescontext = FacesContext.getCurrentInstance();
@@ -74,9 +78,6 @@ public class TodoBean extends Forward implements Serializable {
         redirectToPage(externalContext, "authorization.xhtml");
     }
 
-    public void addNote(){
 
-
-    }
 
 }

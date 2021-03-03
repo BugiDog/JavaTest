@@ -22,7 +22,7 @@ public class AuthBean extends Forward implements Serializable {
 
     private String login;
     private String password;
-    private boolean saveUser = false;
+    private boolean saveUser;
     private String exceptionMessage;
 
     @Inject
@@ -85,8 +85,9 @@ public class AuthBean extends Forward implements Serializable {
     public void authorization() {
         //       FacesContext facescontext = FacesContext.getCurrentInstance();
         //       ExternalContext externalContext = facescontext.getExternalContext();
-        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
 
+        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+        System.out.println("authorization 2");
         try {
             User user = authEJB.checkPassword(login, password);
             todoBean.setUser(user);

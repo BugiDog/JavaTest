@@ -1,0 +1,23 @@
+    <!--    <div class="p-d-flex p-flex-column">-->
+
+    <!--                -->
+
+    <!--                <div class="p-field">-->
+    <!--                    <p:outputLabel for="login" styleClass="p-d-block">Enter your login</p:outputLabel>-->
+    <!--                    <p:inputText id="login" styleClass="p-d-block" value="#{authBean.login}"/>-->
+    <!--                    <p:outputLabel for="@previous" value="Login"/>-->
+    <!--                </div>-->
+    <!--                <div class="p-field">-->
+    <!--                    <p:outputLabel for="password" styleClass="p-d-block">Enter your password</p:outputLabel>-->
+    <!--                    <p:password id="password" value="#{authBean.password}" toggleMask="true" redisplay="true"/>-->
+    <!--                    <p:outputLabel for="@previous" value="Paswword"/>-->
+    <!--                </div>-->
+    <!--                <div class="p-field-checkbox">-->
+    <!--                    <p:selectBooleanCheckbox id="saveUser" value="#{authBean.saveUser}" itemLabel="Basic"/>-->
+    <!--                    <label for="saveUser">Remember me</label>-->
+    <!--                </div>-->
+    <!--        <h:form>-->
+    <!--            <p:commandButton value="Sign in" styleClass="rounded-button"-->
+    <!--                             action="#{authBean.authorization()}"/>-->
+    <!--        </h:form>-->
+    <!--    </div>-->

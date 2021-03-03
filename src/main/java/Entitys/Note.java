@@ -3,6 +3,15 @@ package Entitys;
 
 import javax.persistence.*;
 
+@NamedQueries({
+        @NamedQuery(
+                name = "deleteById",
+                //query = "DELETE c FROM Note c WHERE c.id=id"
+                query = "DELETE FROM Note n WHERE n.id = :id"
+        ),
+
+})
+
 @Entity
 public class Note {
     @Id
@@ -23,6 +32,13 @@ public class Note {
     }
 
     public Note( String title, String description, boolean isPinned) {
+        this.title = title;
+        this.description = description;
+        this.isPinned = isPinned;
+    }
+
+    public Note(Integer id, String title, String description, boolean isPinned) {
+        this.id = id;
         this.title = title;
         this.description = description;
         this.isPinned = isPinned;
@@ -66,5 +82,15 @@ public class Note {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    @Override
+    public String toString() {
+        return "Note{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", isPinned=" + isPinned +
+                '}';
     }
 }
