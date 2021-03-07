@@ -23,7 +23,7 @@ public class TodoEJB {
         User user = entityManager.find(User.class, userId);
         note.setUser(user);
         user.getNotes().add(note);
-        entityManager.persist(user);
+     //   entityManager.persist(user);
 
         return user;
     }
@@ -35,7 +35,7 @@ public class TodoEJB {
         note.setPinned(isPinned);
         User user = entityManager.find(User.class, userId);
         user.getNotes().add(note);
-        entityManager.persist(user);
+       // entityManager.persist(user);
 
         return user;
     }
@@ -45,7 +45,28 @@ public class TodoEJB {
         User user = entityManager.find(User.class, userId);
         note.setUser(null);
         user.getNotes().remove(note);
-        entityManager.persist(user);
+      //  entityManager.persist(user);
+
+        return user;
+    }
+
+    public User pinNote (Integer userId, Integer noteId ){
+        Note note = entityManager.find(Note.class, noteId);
+        User user = entityManager.find(User.class, userId);
+        user.getNotes().remove(note);
+        note.setPinned(!note.isPinned());
+        user.getNotes().add(note);
+       // entityManager.persist(user);
+        return user;
+    }
+
+    public User changeOpenState(Integer userId,Integer noteId){
+        Note note = entityManager.find(Note.class, noteId);
+        User user = entityManager.find(User.class, userId);
+        user.getNotes().remove(note);
+        note.setOpen(!note.isOpen());
+        user.getNotes().add(note);
+      //  entityManager.persist(note);
 
         return user;
     }

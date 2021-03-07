@@ -7,6 +7,7 @@ import Exceptions.AuthException;
 import javax.ejb.EJB;
 
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
@@ -83,10 +84,10 @@ public class AuthBean extends Forward implements Serializable {
     }
 
     public void authorization() {
-        //       FacesContext facescontext = FacesContext.getCurrentInstance();
-        //       ExternalContext externalContext = facescontext.getExternalContext();
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ExternalContext externalContext = facesContext.getExternalContext();
 
-        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+        // ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
         System.out.println("authorization 2");
         try {
             User user = authEJB.checkPassword(login, password);
@@ -101,9 +102,10 @@ public class AuthBean extends Forward implements Serializable {
             redirectToPage(externalContext, "todoPage.xhtml");
         } catch (AuthException e) {
             exceptionMessage = e.getMassage();
+            addMessage(facesContext, FacesMessage.SEVERITY_ERROR, "", exceptionMessage);
             System.out.println("AuthBean redirectToPage authorization.xhtml");
 
-            redirectToPage(externalContext, "authorization.xhtml");
+           // redirectToPage(externalContext, "authorization.xhtml");
         }
     }
 

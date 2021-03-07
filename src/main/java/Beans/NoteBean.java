@@ -73,6 +73,7 @@ public class NoteBean implements Serializable {
     }
 
     public void openModalWindow(Note note) {
+        System.out.println("openModalWindow");
         id = note.getId();
         title = note.getTitle();
         description = note.getDescription();
@@ -81,6 +82,7 @@ public class NoteBean implements Serializable {
     }
 
     public void closeModalWindow() {
+        System.out.println("closeModalWindow");
         modalWindowIsOpen = false;
     }
 
@@ -104,6 +106,20 @@ public class NoteBean implements Serializable {
         isPinned = false;
         closeModalWindow();
         todoBean.setUser(user);
+    }
+
+    public void pinNote(Note note) {
+        User user = todoEJB.pinNote(todoBean.getUser().getId(), note.getId());
+        todoBean.setUser(user);
+    }
+
+    public void isOpen(Note note) {
+       User user = todoEJB.changeOpenState(todoBean.getUser().getId(),note.getId());
+       todoBean.setUser(user);
+    }
+
+    public void send(String str) {
+        System.out.println(str);
     }
 
 

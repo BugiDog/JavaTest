@@ -4,28 +4,47 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
 <f:view>
-    <h:outputLabel value="Dio PIDOR"/>
 </f:view>
 <h:head>
     <title>Registration</title>
+    <h:outputStylesheet name="css/primeflex.min.css"/>
+    <h:outputStylesheet name="css/registrationStyle.css"/>
 </h:head>
 <h:body>
-    <h:outputText value="#{registrationBean.exceptionMessage}"/>
-    <h:form>
-        <h:outputLabel value="Login:"/> <br/>
-        <h:inputText value="#{registrationBean.login}"/>
-        <br/>
-        <h:outputLabel value="Password:"/> <br/>
-        <h:inputText value="#{registrationBean.password}"/>
-        <br/>
-        <h:outputLabel value="Second password:"/> <br/>
-        <h:inputText value="#{registrationBean.secondPassword}"/>
-        <br/>
-        <h:selectBooleanCheckbox value="#{registrationBean.saveUser}"/>
-        <br/>
-        <h:commandButton value="Войти" action="#{registrationBean.registration()}"/>
-    </h:form>
+    <p:growl id="growl" showDetail="true"/>
+    <div class="container">
+        <div class="p-d-flex p-flex-column reg-window">
+            <p:outputLabel value="Registration" styleClass="reg-label"/>
+            <h:form styleClass="reg-form">
+
+                <div class="ui-float-label login-input" style="margin-bottom: 20px;">
+                    <p:inputText id="login" styleClass="p-d-block" value="#{registrationBean.login}" style="width: 200px"/>
+                    <p:outputLabel for="@previous" value="Login"/>
+                </div>
+
+                <div class="ui-float-label password-div" style="margin-bottom: 20px;">
+                    <p:password id="password" value="#{registrationBean.password}" toggleMask="true" redisplay="true" style="width: 200px"/>
+                    <p:outputLabel for="@previous" value="Password"/>
+                </div>
+                <div class="ui-float-label password-div" style="margin-bottom: 20px;">
+                    <p:password id="password2" value="#{registrationBean.secondPassword}" toggleMask="true" redisplay="true" style="width: 200px"/>
+                    <p:outputLabel for="@previous" value="Repeat password"/>
+                </div>
+
+                <div class="p-field-checkbox" style="margin-bottom: 20px;">
+                    <p:selectBooleanCheckbox id="saveUser" value="#{registrationBean.saveUser}" itemLabel="Remember me" />
+                </div>
+                <p:commandButton value="Submit" action="#{registrationBean.registration()}" update="growl" style="width: 200px" styleClass="ui-button-success"/>
+            </h:form>
+            <h:form>
+                <p:commandButton value="Go back" action="#{registrationBean.goToAuthorization()}" styleClass="ui-button-success"/>
+            </h:form>
+        </div>
+    </div>
+
+
 </h:body>
 </html>

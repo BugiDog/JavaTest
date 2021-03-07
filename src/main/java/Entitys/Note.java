@@ -4,11 +4,7 @@ package Entitys;
 import javax.persistence.*;
 
 @NamedQueries({
-        @NamedQuery(
-                name = "deleteById",
-                //query = "DELETE c FROM Note c WHERE c.id=id"
-                query = "DELETE FROM Note n WHERE n.id = :id"
-        ),
+
 
 })
 
@@ -23,6 +19,8 @@ public class Note {
     private String description;
 
     private boolean isPinned;
+
+    private boolean isOpen;
 
     @ManyToOne(optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", nullable = false)
@@ -84,6 +82,14 @@ public class Note {
         this.user = user;
     }
 
+    public boolean isOpen() {
+        return isOpen;
+    }
+
+    public void setOpen(boolean open) {
+        isOpen = open;
+    }
+
     @Override
     public String toString() {
         return "Note{" +
@@ -91,6 +97,7 @@ public class Note {
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", isPinned=" + isPinned +
+                ", isOpen=" + isOpen +
                 '}';
     }
 }

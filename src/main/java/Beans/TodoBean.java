@@ -70,7 +70,7 @@ public class TodoBean extends Forward implements Serializable {
 //        ExternalContext externalContext = facescontext.getExternalContext();
         ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
 
-        user= null;
+       // user= null;
         Map<String,Object> cookieProperties = new HashMap<String, Object>();
         cookieProperties.put("maxAge", 0);
         externalContext.addResponseCookie("authToken", "", cookieProperties);

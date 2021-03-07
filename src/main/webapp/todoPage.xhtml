@@ -9,41 +9,38 @@
 >
 <f:view>
     <f:event type="preRenderView" listener="#{todoBean.todoCheckCookie()}"/>
-
 </f:view>
 <h:head>
     <title>TODO</title>
-    <h:outputStylesheet library="css" name="todoPage.css"/>
+    <h:outputStylesheet name="css/todoPage.css"/>
+    <h:outputStylesheet name="css/primeflex.min.css"/>
     <h:outputScript library="js" name="main.js"/>
 </h:head>
 <h:body>
-    <h:panelGroup layout="block">
-        <h:outputLabel value="#{todoBean.user.login}" styleClass="login"/>
+    <div class="container">
+        <div>
 
-        <!--        <h:commandButton value="Добавить заметку"  onclick="add('pflzvsdfg')"/>-->
+        </div>
         <h:form>
-            <h:commandButton value="Добавить заметку" action="#{noteBean.openModalWindow}"/>
+            <p:commandButton value="Добавить заметку" action="#{noteBean.openModalWindow}" update="modal"/>
         </h:form>
+        <h:panelGroup id="noteList">
+            <ui:repeat value="#{todoBean.user.notes}" var="var">
+                <h:panelGroup layout="block" styleClass="noteItem">
+                    <ui:include src="resources/components/note.xhtml">
+                        <ui:param name="data" value="#{var}"></ui:param>
+                    </ui:include>
+                </h:panelGroup>
+            </ui:repeat>
+        </h:panelGroup>
 
-        <ui:repeat value="#{todoBean.user.notes}" var="var">
-            <h:panelGroup layout="block" styleClass="noteItem">
-                <ui:include src="resources/components/note.xhtml">
-                    <ui:param name="data" value="#{var}"></ui:param>
+
+        <h:panelGroup layout="block" id="modal">
+            <h:panelGroup layout="block" styleClass="modal-bg" rendered="#{noteBean.modalWindowIsOpen}">
+                <ui:include src="resources/components/addAndEditNote.xhtml">
+                    <!--            <ui:param name="data" value=""></ui:param>-->
                 </ui:include>
             </h:panelGroup>
-
-
-            <!--    <div class="menuRight">-->
-            <!--        <ui:insert name="menuRight">-->
-            <!--            <ui:include src="pages/todoPage.xhtml"/>-->
-            <!--        </ui:insert>-->
-            <!--    </div>-->
-        </ui:repeat>
-
-        <h:panelGroup layout="block" styleClass="change" id="modal" rendered="#{noteBean.modalWindowIsOpen}">
-            <ui:include src="resources/components/addAndEditNote.xhtml">
-                <!--            <ui:param name="data" value=""></ui:param>-->
-            </ui:include>
         </h:panelGroup>
 
 
@@ -51,7 +48,7 @@
             <h:commandButton value="Выйти" action="#{todoBean.exit()}"/>
         </h:form>
 
-    </h:panelGroup>
+    </div>
 
 </h:body>
 </html>

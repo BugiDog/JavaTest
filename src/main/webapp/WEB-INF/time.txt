@@ -1,3 +1,64 @@
+<!--    <h:outputText value="#{authBean.exceptionMessage}"/>-->
+<!--    <h:form>-->
+<!--        <h:outputLabel value="login:"/> <br/>-->
+<!--        <h:inputText value="#{authBean.login}"/>-->
+<!--        <br/>-->
+<!--        <h:outputLabel value="password:"/> <br/>-->
+<!--        <h:inputText value="#{authBean.password}"/>-->
+<!--        <br/>-->
+<!--        <h:selectBooleanCheckbox value="#{authBean.saveUser}"/>-->
+<!--        <br/>-->
+<!--        <h:commandButton value="Войти" action="#{authBean.authorization()}"/>-->
+<!--    </h:form>-->
+<!--    <h:form>-->
+<!--        <h:commandButton value="Регистрация" action="#{authBean.goToRegistration()}"/>-->
+<!--    </h:form>-->
+
+
+    <h:form>
+        <h:outputLabel value="Login:"/> <br/>
+        <h:inputText value="#{registrationBean.login}"/>
+        <br/>
+        <h:outputLabel value="Password:"/> <br/>
+        <h:inputText value="#{registrationBean.password}"/>
+        <br/>
+        <h:outputLabel value="Second password:"/> <br/>
+        <h:inputText value="#{registrationBean.secondPassword}"/>
+        <br/>
+        <h:selectBooleanCheckbox value="#{registrationBean.saveUser}"/>
+        <br/>
+        <h:commandButton value="Войти" action="#{registrationBean.registration()}"/>
+    </h:form>
+
+
+
+    <!--    <div class="p-field-checkbox" style="margin-bottom: 10px;">-->
+    <!--        <p:selectBooleanCheckbox id="saveUser" value="#{data.pinned}" itemLabel="Remember me" />-->
+    <!--    </div>-->
+    <!--    <h:form>-->
+    <!--        <h:selectBooleanCheckbox value="#{data.pinned}">-->
+    <!--            <f:ajax listener="#{noteBean.pinNote(data)}"/>-->
+    <!--        </h:selectBooleanCheckbox>-->
+    <!--    </h:form>-->
+    <!--    <h:form>-->
+    <!--        <h:commandButton value="Удалить заметку" action="#{noteBean.deleteNote(data)}"/>-->
+    <!--        <h:commandButton value="Изменить" action="#{noteBean.openModalWindow(data)}"/>-->
+    <!--    </h:form>-->
+
+
+
+
+    <p:fieldset legend="#{data.title}" toggleable="true" toggleSpeed="500" >
+        <p:ajax event="toggle" listener="#{noteBean.isOpen(data)}"/>
+        <p class="p-m-0">
+            #{data.description}
+        </p>
+    </p:fieldset>
+
+
+
+
+
     <!--    <div class="p-d-flex p-flex-column">-->
 
     <!--                -->
@@ -21,3 +82,75 @@
     <!--                             action="#{authBean.authorization()}"/>-->
     <!--        </h:form>-->
     <!--    </div>-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="p-d-flex p-flex-column">
+        <div class="card">
+            <h:form id="form">
+
+                <div class="p-field">
+                    <p:outputLabel for="login" styleClass="p-d-block">Enter your login</p:outputLabel>
+                    <p:inputText id="login" styleClass="p-d-block" value="#{authBean.login}"/>
+                    <p:outputLabel for="@previous" value="Login"/>
+                </div>
+                <div class="p-field">
+                    <p:outputLabel for="password" styleClass="p-d-block">Enter your password</p:outputLabel>
+                    <p:password id="password" value="#{authBean.password}" toggleMask="true" redisplay="true"/>
+                    <p:outputLabel for="@previous" value="Paswword"/>
+                </div>
+                <div class="p-field-checkbox">
+                    <p:selectBooleanCheckbox id="saveUser" value="#{authBean.saveUser}" itemLabel="Basic"/>
+                    <label for="saveUser">Remember me</label>
+                </div>
+                <!--            <h:commandButton value="Войти" action="#{authBean.authorization()}"/>-->
+                <p:commandButton  type="button" value="Sign in" action="#{authBean.authorization()}"/>
+            </h:form>
+        </div>
+
+    </div>
+
+
+
+
+                <p:commandLink styleClass="ui-panel-titlebar-icon ui-corner-all ui-state-default"
+                   action="#{noteBean.openModalWindow(data)}" update="modal">
+                <h:outputText styleClass="ui-icon pi pi-pencil"/>
+               </p:commandLink>
+               <p:commandLink styleClass="ui-panel-titlebar-icon ui-corner-all ui-state-default"
+                 action="#{noteBean.deleteNote(data)}" update="noteList">
+                   <h:outputText styleClass="ui-icon pi pi-trash" style="color: #ff0000"/>
+               <p:confirm type="popup" header="Confirmation" message="Do you want to delete this record?"
+                icon="pi pi-info-circle"/>
+                      </p:commandLink>
+
+
+
+                             <p:menu>
+                                 <p:submenu label="Settings">
+                                     <p:menuitem value="Edit" icon="pi pi-pencil" action="#{noteBean.openModalWindow(data)}"
+                                     />
+                                     <p:menuitem value="Delete" icon="pi pi-trash" action="#{noteBean.deleteNote(data)}"
+                                     >
+                                         <p:confirm type="popup" header="Confirmation" message="Do you want to delete this note?"
+                                                    icon="pi pi-info-circle"/>
+                                     </p:menuitem>
+                                 </p:submenu>
+                             </p:menu>
+
+
+                    <p:menuitem value="Delete" icon="pi pi-trash"
+                    >
+                        <p:confirm type="popup" header="Confirmation" message="Do you want to delete this note?"
+                                   icon="pi pi-info-circle"/>
+                    </p:menuitem>

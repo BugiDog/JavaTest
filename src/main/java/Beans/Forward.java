@@ -1,5 +1,6 @@
 package Beans;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import java.io.IOException;
@@ -18,5 +19,10 @@ public class Forward {
             e.printStackTrace();
         }
 
+    }
+
+    protected void addMessage(FacesContext facesContext, FacesMessage.Severity severity, String summary, String detail) {
+        facesContext.
+                addMessage(null, new FacesMessage(severity, summary, detail));
     }
 }

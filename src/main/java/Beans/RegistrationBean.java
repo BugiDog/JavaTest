@@ -6,6 +6,7 @@ import Entitys.User;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
@@ -67,9 +68,9 @@ public class RegistrationBean extends Forward implements Serializable {
     }
 
     public void registration() {
-//        FacesContext facescontext = FacesContext.getCurrentInstance();
-//        ExternalContext externalContext = facescontext.getExternalContext();
-        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ExternalContext externalContext = facesContext.getExternalContext();
+ //       ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
 
         if (password.equals(secondPassword)) {
             if (authEJB.checkUser(login)) {
@@ -84,15 +85,24 @@ public class RegistrationBean extends Forward implements Serializable {
                 redirectToPage(externalContext, "todoPage.xhtml");
             }else {
                 exceptionMessage = "login is busy";
+                addMessage(facesContext, FacesMessage.SEVERITY_WARN, "", exceptionMessage);
                 System.out.println("registration redirectToPage pages/todoPage.xhtml");
-                redirectToPage(externalContext, "registration.xhtml");
+              //  redirectToPage(externalContext, "registration.xhtml");
             }
         } else {
             exceptionMessage = "passwords don't match ";
+            addMessage(facesContext, FacesMessage.SEVERITY_ERROR, "", exceptionMessage);
             System.out.println("registration redirectToPage pages/todoPage.xhtml");
-            redirectToPage(externalContext, "registration.xhtml");
+           // redirectToPage(externalContext, "registration.xhtml");
         }
 
+    }
+
+    public void goToAuthorization(){
+        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+
+        System.out.println("goToAuthorization redirectToPage authorization.xhtml");
+        redirectToPage(externalContext, "authorization.xhtml");
     }
 
 }
