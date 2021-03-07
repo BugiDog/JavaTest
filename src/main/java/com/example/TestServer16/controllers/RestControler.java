@@ -24,7 +24,7 @@ import java.util.Set;
 
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "*")
 public class RestControler {
 
     @Autowired
