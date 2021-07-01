@@ -30,7 +30,7 @@ public class NoteDTO {
     }
 
     public List<Tag> tagsListGener(int[] arr, Iterable<Tag> tagList) {
-        for (int item:arr){
+        for (int item : arr) {
             System.out.println(item);
 
         }
@@ -41,14 +41,14 @@ public class NoteDTO {
             boolean flag = false;
             for (int i = 0; i < arr.length; i++) {
                 if (arr[i] == tag.getId()) {
-                    Tag newTag = new Tag(tag,true);
+                    Tag newTag = new Tag(tag, true);
                     rez.add(newTag);
-                    flag=true;
+                    flag = true;
                     break;
                 }
             }
-            if(!flag){
-                Tag newTag = new Tag(tag,false);
+            if (!flag) {
+                Tag newTag = new Tag(tag, false);
                 rez.add(newTag);
             }
         }
@@ -106,6 +106,6 @@ public class NoteDTO {
 
     @Override
     public String toString() {
-        return title+description;
+        return title + description;
     }
 }

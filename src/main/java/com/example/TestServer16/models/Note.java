@@ -18,8 +18,8 @@ public class Note {
     private String title;
     private String description;
     private boolean isPinned;
-    private int [] activeTagsArray;
-//    @Column(length = 15000)
+    private int[] activeTagsArray;
+    //    @Column(length = 15000)
 //    private String tagsArray;
 //    @ElementCollection
 //    private List<Tag> tagsArray;
@@ -29,7 +29,7 @@ public class Note {
             joinColumns = @JoinColumn(name = "note_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
-    private Set<Tag> tags= new HashSet<>();
+    private Set<Tag> tags = new HashSet<>();
 //
 //    public void addTag(Tag tag){
 //        tagsArray.add(tag);
@@ -44,12 +44,12 @@ public class Note {
     public Note() {
     }
 
-    public Note(String userToken, String title, String description, boolean isPinned, int [] activeTagsArray) {
+    public Note(String userToken, String title, String description, boolean isPinned, int[] activeTagsArray) {
         this.userToken = userToken;
         this.title = title;
         this.description = description;
         this.isPinned = isPinned;
-        this.activeTagsArray=activeTagsArray;
+        this.activeTagsArray = activeTagsArray;
     }
 
 //    public Note(Map note) {
@@ -60,21 +60,22 @@ public class Note {
 //        //this.activeTagsArray=activtagArrGener(note.get("activeTagsArray").toString());
 //    }
 
-    private int [] activtagArrGener(String str){
-        int [] rez=new int [0];
+    private int[] activtagArrGener(String str) {
+        int[] rez = new int[0];
         ObjectMapper mapper = new ObjectMapper();
         try {
-            List<Tag> participantJsonList = mapper.readValue(str, new TypeReference<List<Tag>>(){});
-            for (Tag tag:participantJsonList){
-                if(tag.getIsActive()){
-                    rez = Arrays.copyOf(rez, rez.length+1);
-                    rez[rez.length-1]=tag.getId();
+            List<Tag> participantJsonList = mapper.readValue(str, new TypeReference<List<Tag>>() {
+            });
+            for (Tag tag : participantJsonList) {
+                if (tag.getIsActive()) {
+                    rez = Arrays.copyOf(rez, rez.length + 1);
+                    rez[rez.length - 1] = tag.getId();
                 }
             }
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        System.out.println("rez"+rez.toString());
+        System.out.println("rez" + rez.toString());
         return rez;
     }
 

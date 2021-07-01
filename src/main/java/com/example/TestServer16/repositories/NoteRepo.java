@@ -5,8 +5,7 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface NoteRepo extends CrudRepository<Note, Integer> {
 
-    Iterable <Note>  findByUserToken(String token);
-
+    Iterable<Note> findByUserToken(String token);
 
 
 }

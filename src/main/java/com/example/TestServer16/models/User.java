@@ -8,16 +8,15 @@ import java.security.SecureRandom;
 import java.util.Base64;
 
 
-
 @Entity
-@Table(name="users")
+@Table(name = "users")
 public class User {
 
     @Id
     @GeneratedValue
     private Integer id;
 
-    private String token=generateNewToken();
+    private String token = generateNewToken();
 
     public String getToken() {
         return token;

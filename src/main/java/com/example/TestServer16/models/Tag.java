@@ -32,7 +32,7 @@ public class Tag {
     }
 
     public Tag(Tag tag, boolean active) {
-        this.id= tag.getId();
+        this.id = tag.getId();
         this.userToken = tag.getUserToken();
         this.name = tag.getName();
         this.isActive = active;

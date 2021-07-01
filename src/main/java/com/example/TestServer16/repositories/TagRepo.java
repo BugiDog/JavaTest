@@ -10,7 +10,7 @@ import javax.transaction.Transactional;
 
 public interface TagRepo extends CrudRepository<Tag, Integer> {
 
-    Iterable <Tag>  findByUserToken(String token);
+    Iterable<Tag> findByUserToken(String token);
 
     @Transactional
     @Modifying
