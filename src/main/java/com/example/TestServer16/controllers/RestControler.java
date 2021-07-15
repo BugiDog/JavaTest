@@ -34,7 +34,6 @@ public class RestControler {
     @Autowired
     private TagRepo tagRepo;
 
-
     @RequestMapping(value = "/addUser", method = RequestMethod.GET)
     public User addUser() {
         System.out.println("addUsers--------------------------");
@@ -76,11 +75,8 @@ public class RestControler {
         Note newNote = null;
         try {
 
-            //           Map<String,String> result = new ObjectMapper().readValue(data, HashMap.class);
             ObjectMapper mapper = new ObjectMapper();
-//            mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
             newNote = mapper.readValue(data, Note.class);
-            //           newNote = new Note(result);
 
         } catch (JsonProcessingException e) {
             e.printStackTrace();
