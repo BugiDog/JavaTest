@@ -24,7 +24,7 @@ import java.util.Set;
 
 
 @RestController
-//@CrossOrigin(origins ="*")
+//@CrossOrigin(origins ="*") 
 public class RestControler {
 
     @Autowired
