@@ -24,7 +24,7 @@ import java.util.Set;
 
 
 @RestController
-@CrossOrigin(origins = "*")
+//@CrossOrigin(origins ="*")
 public class RestControler {
 
     @Autowired
@@ -34,6 +34,7 @@ public class RestControler {
     @Autowired
     private TagRepo tagRepo;
 
+//    @CrossOrigin(origins ="*")
     @RequestMapping(value = "/addUser", method = RequestMethod.GET)
     public User addUser() {
         System.out.println("addUsers--------------------------");
