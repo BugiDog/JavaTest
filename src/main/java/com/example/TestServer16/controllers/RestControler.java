@@ -24,7 +24,7 @@ import java.util.Set;
 
 
 @RestController
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "https://qbbyone.github.io/TODO-app/")
 public class RestControler {
 
     @Autowired
